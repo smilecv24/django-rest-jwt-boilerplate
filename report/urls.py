@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.http import JsonResponse
 from django.views import generic
 from rest_framework import serializers, views, status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.schemas import get_schema_view
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -27,11 +29,16 @@ class MessageSerializer(serializers.Serializer):
 
 
 class EchoView(views.APIView):
+
+    permission_classes = (IsAuthenticated, )
+
     def post(self, request, *args, **kwargs):
         serializer = MessageSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    def get(self, request):
+        return JsonResponse({'test':'test'})
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
