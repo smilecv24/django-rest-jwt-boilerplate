@@ -15,30 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.http import JsonResponse
 from django.views import generic
-from rest_framework import serializers, views, status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework.schemas import get_schema_view
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
-
-class MessageSerializer(serializers.Serializer):
-    message = serializers.CharField()
-
-
-class EchoView(views.APIView):
-
-    permission_classes = (IsAuthenticated, )
-
-    def post(self, request, *args, **kwargs):
-        serializer = MessageSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def get(self, request):
-        return JsonResponse({'test':'test'})
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -46,7 +25,7 @@ urlpatterns = [
     url(r'^$', generic.RedirectView.as_view(url='/api/', permanent=False)),
     url(r'^api/$', get_schema_view()),
 
-    url(r'^api/echo/$', EchoView.as_view()),
+    url(r'^api/', include('api.urls')),
 
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/auth/token/obtain/$', TokenObtainPairView.as_view()),
