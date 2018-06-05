@@ -16,14 +16,16 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views import generic
-from rest_framework.schemas import get_schema_view
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='Report API')
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     url(r'^$', generic.RedirectView.as_view(url='/api/', permanent=False)),
-    url(r'^api/$', get_schema_view()),
+    url(r'^api/$', schema_view),
 
     url(r'^api/', include('api.urls')),
 
