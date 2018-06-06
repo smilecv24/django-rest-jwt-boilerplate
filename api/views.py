@@ -33,3 +33,11 @@ class UserDetail(views.APIView):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response({'users': serializer.data})
+
+    def delete(self, request, pk):
+        snippet = self.get_object(pk)
+        snippet.delete()
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response({'users': serializer.data})
+
