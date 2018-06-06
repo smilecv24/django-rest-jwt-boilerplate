@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url
 
-from api.views import EchoView
+from api.views import EchoView, UserDetail
 
 urlpatterns = [
 
-    url(r'echo/$', EchoView.as_view()),
+    url(r'users/$', EchoView.as_view()),
+    url(r'^user/(?P<pk>[0-9]+)/$', UserDetail.as_view()),
 
 ]
