@@ -15,6 +15,13 @@ class EchoView(views.APIView):
         serializer = UserSerializer(users, many=True)
         return Response({'users': serializer.data})
 
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'user': serializer.data}, status=status.HTTP_201_CREATED)
+        return Response({'error': 'create error'}, status=status.HTTP_204_NO_CONTENT)
+
 
 class UserDetail(views.APIView):
     permission_classes = (IsAuthenticated,)
@@ -40,4 +47,3 @@ class UserDetail(views.APIView):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response({'users': serializer.data})
-
