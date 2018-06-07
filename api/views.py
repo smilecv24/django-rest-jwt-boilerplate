@@ -11,7 +11,7 @@ class EchoView(views.APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        users = User.objects.all()
+        users = User.objects.all().order_by('id')
         serializer = UserSerializer(users, many=True)
         return Response({'users': serializer.data})
 
@@ -37,13 +37,13 @@ class UserDetail(views.APIView):
         serializer = UserDetailSerializer(snippet, data=request.data)
         if serializer.is_valid():
             serializer.save()
-        users = User.objects.all()
+        users = User.objects.all().order_by('id')
         serializer = UserSerializer(users, many=True)
         return Response({'users': serializer.data})
 
     def delete(self, request, pk):
         snippet = self.get_object(pk)
         snippet.delete()
-        users = User.objects.all()
+        users = User.objects.all().order_by('id')
         serializer = UserSerializer(users, many=True)
         return Response({'users': serializer.data})
