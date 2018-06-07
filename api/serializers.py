@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -6,6 +7,14 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Snippet` instance, given the validated data.
+        """
+        return User.objects.create(email=validated_data['email'],
+                                   username=validated_data['username'],
+                                   password=make_password(validated_data['password']))
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
